@@ -24,4 +24,22 @@ let result = day1lines
 
 print(result)
 
+
+func allFuel(mass: Int) -> Int {
+    let thisFuel = fuel(mass: mass)
+    if thisFuel <= 0 { return 0 }
+    return thisFuel + allFuel(mass: thisFuel)
+}
+
+print(allFuel(mass: 14))
+print(allFuel(mass: 1969))
+print(allFuel(mass: 100756))
+
+let part2 = day1lines
+    .compactMap(Int.init)
+    .map(allFuel(mass:))
+    .reduce(0, +)
+
+print(part2)
+
 //: [Next](@next)
