@@ -17,6 +17,8 @@ print(part2valid("123789"))
 print(part2valid("112233"))
 print(part2valid("123444"))
 print(part2valid("111122"))
+print(part2valid("111333"))
+print(part2valid("699999"))
 
 var validCount = 0
 for password in 353096...843212 {

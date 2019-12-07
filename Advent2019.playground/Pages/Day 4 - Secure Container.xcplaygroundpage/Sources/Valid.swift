@@ -17,7 +17,7 @@ public func isValid(_ password: String) -> Bool {
 public func part2valid(_ password: String) -> Bool {
     let points = [UInt8](password.utf8)
     var hasDouble = false
-    var currentRunLength = 0
+    var currentRunLength = 1
     for i in 0..<(points.count - 1) {
         if points[i] > points[i + 1] {
             return false
