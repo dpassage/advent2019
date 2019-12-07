@@ -1,6 +1,7 @@
 //: [Previous](@previous)
 
 import Foundation
+import Intcode
 
 func execute(input: String) {
     let numbers = input.split(separator: ",").map(String.init).compactMap(Int.init)
