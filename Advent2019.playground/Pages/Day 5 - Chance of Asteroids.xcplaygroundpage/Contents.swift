@@ -1,6 +1,7 @@
 //: [Previous](@previous)
 
 import Foundation
+import Intcode
 
 Computer.execute(program: "3,0,4,0,99", inputs: [2135])
 
@@ -11,21 +12,6 @@ let fileURL = Bundle.main.url(forResource: "day5.input", withExtension: "txt")!
 let day5string = try! String(contentsOf: fileURL)
 
 Computer.execute(program: day5string, inputs: [1])
-
-//3,9,8,9,10,9,4,9,99,-1,8 - Using position mode, consider whether the input is equal to 8; output 1 (if it is) or 0 (if it is not).
-Computer.execute(program: "3,9,8,9,10,9,4,9,99,-1,8", inputs: [1])
-Computer.execute(program: "3,9,8,9,10,9,4,9,99,-1,8", inputs: [8])
-
-//3,9,7,9,10,9,4,9,99,-1,8 - Using position mode, consider whether the input is less than 8; output 1 (if it is) or 0 (if it is not).
-Computer.execute(program: "3,9,7,9,10,9,4,9,99,-1,8", inputs: [1])
-Computer.execute(program: "3,9,7,9,10,9,4,9,99,-1,8", inputs: [8])
-
-//3,3,1108,-1,8,3,4,3,99 - Using immediate mode, consider whether the input is equal to 8; output 1 (if it is) or 0 (if it is not).
-Computer.execute(program: "3,3,1108,-1,8,3,4,3,99", inputs: [1])
-Computer.execute(program: "3,3,1108,-1,8,3,4,3,99", inputs: [8])
-//3,3,1107,-1,8,3,4,3,99 - Using immediate mode, consider whether the input is less than 8; output 1 (if it is) or 0 (if it is not).
-Computer.execute(program: "3,3,1107,-1,8,3,4,3,99", inputs: [1])
-Computer.execute(program: "3,3,1107,-1,8,3,4,3,99", inputs: [8])
 
 //Here are some jump tests that take an input, then output 0 if the input was zero or 1 if the input was non-zero:
 //

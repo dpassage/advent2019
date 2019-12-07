@@ -78,6 +78,7 @@ public struct Computer {
         case 4:
             let value = read(param: 1)
             print("OUTPUT: \(value)")
+            output.append(value)
             pc += 2
         // Opcode 5 is jump-if-true: if the first parameter is non-zero, it sets the instruction pointer to the value
         // from the second parameter. Otherwise, it does nothing.
@@ -142,5 +143,12 @@ public struct Computer {
         var computer = Computer(memory: numbers)
         computer.inputLines.append(contentsOf: inputs)
         computer.run()
+    }
+
+    public static func run(program: [Int], inputs: [Int] = []) -> [Int] {
+        var computer = Computer(memory: program)
+        computer.inputLines.append(contentsOf: inputs)
+        computer.run()
+        return computer.output
     }
 }

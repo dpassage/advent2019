@@ -42,3 +42,70 @@ class ComputerTests: XCTestCase {
         }
     }
 }
+
+class ComputerDay5Tests: XCTestCase {
+    func testInputOutput() {
+        let program = [3,0,4,0,99]
+        var computer1 = Computer(memory: program)
+        computer1.input(line: 4)
+        computer1.run()
+        XCTAssertEqual(computer1.output, [4])
+    }
+
+    func testImmediateMul() {
+        let program = [1002,4,3,4,33]
+        var computer = Computer(memory: program)
+        computer.run()
+        XCTAssertEqual(computer.memory[4], 99)
+        XCTAssertTrue(computer.halted)
+        XCTAssertFalse(computer.crashed)
+    }
+
+    func testPositionEqual() {
+        let program = [3,9,8,9,10,9,4,9,99,-1,8]
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [1]),
+            [0]
+        )
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [8]),
+            [1]
+        )
+    }
+
+    func testPositionLessThan() {
+        let program = [3,9,7,9,10,9,4,9,99,-1,8]
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [1]),
+            [1]
+        )
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [8]),
+            [0]
+        )
+    }
+
+    func testImmediateEqual() {
+        let program = [3,3,1108,-1,8,3,4,3,99]
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [1]),
+            [0]
+        )
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [8]),
+            [1]
+        )
+    }
+
+    func testImmediateLessThan() {
+        let program = [3,3,1107,-1,8,3,4,3,99]
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [1]),
+            [1]
+        )
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [8]),
+            [0]
+        )
+    }
+}
