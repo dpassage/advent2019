@@ -11,8 +11,8 @@ public struct Computer {
         self.memory.append(0)
     }
 
-    var inputLines = [String]()
-    public mutating func input(line: String) {
+    var inputLines = [Int]()
+    public mutating func input(line: Int) {
         inputLines.append(line)
     }
 
@@ -71,11 +71,7 @@ public struct Computer {
                 return
             }
             let line = inputLines.removeFirst()
-            guard let value = Int(line) else {
-                crash("illegal input!")
-                return
-            }
-            memory[memory[pc + 1]] = value
+            memory[memory[pc + 1]] = line
             pc += 2
         case 4:
             let value = read(param: 1)
@@ -138,7 +134,7 @@ public struct Computer {
         }
     }
 
-    public static func execute(program: String, inputs: [String] = []) {
+    public static func execute(program: String, inputs: [Int] = []) {
         print("START:")
         let numbers = program.split(separator: ",").map(String.init).compactMap(Int.init)
         var computer = Computer(memory: numbers)
