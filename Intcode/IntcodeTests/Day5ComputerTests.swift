@@ -98,4 +98,30 @@ class Day5ComputerTests: XCTestCase {
             [0]
         )
     }
+
+    func testLargerExample() {
+        let program = [3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+                       1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+                       999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99]
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [7]),
+            [999]
+        )
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [8]),
+            [1000]
+        )
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [9]),
+            [1001]
+        )
+    }
+
+    func testCountdown() {
+        let program = [101,-1,7,7,4,7,1105,11,0,99]
+        XCTAssertEqual(
+            Computer.run(program: program),
+            [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
+        )
+    }
 }
