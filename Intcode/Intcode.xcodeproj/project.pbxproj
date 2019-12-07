@@ -10,7 +10,8 @@
 		6B7243FE239B9911009D0EB1 /* Intcode.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B7243F4239B9911009D0EB1 /* Intcode.framework */; };
 		6B724405239B9911009D0EB1 /* Intcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B7243F7239B9911009D0EB1 /* Intcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6B72440F239B992A009D0EB1 /* Computer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72440E239B992A009D0EB1 /* Computer.swift */; };
-		6B724411239B997F009D0EB1 /* ComputerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B724410239B997F009D0EB1 /* ComputerTests.swift */; };
+		6B724411239B997F009D0EB1 /* Day2ComputerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B724410239B997F009D0EB1 /* Day2ComputerTests.swift */; };
+		6B724413239BB21D009D0EB1 /* Day5ComputerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B724412239BB21D009D0EB1 /* Day5ComputerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,7 +31,8 @@
 		6B7243FD239B9911009D0EB1 /* IntcodeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IntcodeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B724404239B9911009D0EB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B72440E239B992A009D0EB1 /* Computer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Computer.swift; sourceTree = "<group>"; };
-		6B724410239B997F009D0EB1 /* ComputerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputerTests.swift; sourceTree = "<group>"; };
+		6B724410239B997F009D0EB1 /* Day2ComputerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day2ComputerTests.swift; sourceTree = "<group>"; };
+		6B724412239BB21D009D0EB1 /* Day5ComputerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day5ComputerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,7 +86,8 @@
 			isa = PBXGroup;
 			children = (
 				6B724404239B9911009D0EB1 /* Info.plist */,
-				6B724410239B997F009D0EB1 /* ComputerTests.swift */,
+				6B724410239B997F009D0EB1 /* Day2ComputerTests.swift */,
+				6B724412239BB21D009D0EB1 /* Day5ComputerTests.swift */,
 			);
 			path = IntcodeTests;
 			sourceTree = "<group>";
@@ -207,7 +210,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B724411239B997F009D0EB1 /* ComputerTests.swift in Sources */,
+				6B724411239B997F009D0EB1 /* Day2ComputerTests.swift in Sources */,
+				6B724413239BB21D009D0EB1 /* Day5ComputerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
