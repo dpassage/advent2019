@@ -100,7 +100,6 @@ public struct Computer {
             } else {
                 pc += 3
             }
-
         // Opcode 7 is less than: if the first parameter is less than the second parameter, it stores 1 in the position
         // given by the third parameter. Otherwise, it stores 0.
         case 7:

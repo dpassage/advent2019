@@ -108,4 +108,28 @@ class ComputerDay5Tests: XCTestCase {
             [0]
         )
     }
+
+    func testPositionJump() {
+        let program = [3,12,6,12,15,1,13,14,13,4,13,99,-1,0,1,9]
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [1]),
+            [1]
+        )
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [0]),
+            [0]
+        )
+    }
+
+    func testImmediateJump() {
+        let program = [3,3,1105,-1,9,1101,0,0,12,4,12,99,1]
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [1]),
+            [1]
+        )
+        XCTAssertEqual(
+            Computer.run(program: program, inputs: [0]),
+            [0]
+        )
+    }
 }

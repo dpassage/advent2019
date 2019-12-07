@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		6B7243FE239B9911009D0EB1 /* Intcode.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B7243F4239B9911009D0EB1 /* Intcode.framework */; };
-		6B724403239B9911009D0EB1 /* IntcodeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B724402239B9911009D0EB1 /* IntcodeTests.swift */; };
 		6B724405239B9911009D0EB1 /* Intcode.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B7243F7239B9911009D0EB1 /* Intcode.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6B72440F239B992A009D0EB1 /* Computer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B72440E239B992A009D0EB1 /* Computer.swift */; };
 		6B724411239B997F009D0EB1 /* ComputerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B724410239B997F009D0EB1 /* ComputerTests.swift */; };
@@ -29,7 +28,6 @@
 		6B7243F7239B9911009D0EB1 /* Intcode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Intcode.h; sourceTree = "<group>"; };
 		6B7243F8239B9911009D0EB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B7243FD239B9911009D0EB1 /* IntcodeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IntcodeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		6B724402239B9911009D0EB1 /* IntcodeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IntcodeTests.swift; sourceTree = "<group>"; };
 		6B724404239B9911009D0EB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6B72440E239B992A009D0EB1 /* Computer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Computer.swift; sourceTree = "<group>"; };
 		6B724410239B997F009D0EB1 /* ComputerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComputerTests.swift; sourceTree = "<group>"; };
@@ -85,7 +83,6 @@
 		6B724401239B9911009D0EB1 /* IntcodeTests */ = {
 			isa = PBXGroup;
 			children = (
-				6B724402239B9911009D0EB1 /* IntcodeTests.swift */,
 				6B724404239B9911009D0EB1 /* Info.plist */,
 				6B724410239B997F009D0EB1 /* ComputerTests.swift */,
 			);
@@ -211,7 +208,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				6B724411239B997F009D0EB1 /* ComputerTests.swift in Sources */,
-				6B724403239B9911009D0EB1 /* IntcodeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
