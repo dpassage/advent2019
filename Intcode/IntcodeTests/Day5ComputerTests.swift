@@ -124,4 +124,12 @@ class Day5ComputerTests: XCTestCase {
             [10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
         )
     }
+
+    func testOutputZero() {
+        let program = [1,0,3,3,1005,2,10,5,1,0,4,1,99]
+        XCTAssertEqual(
+            Computer.run(program: program),
+            [0]
+        )
+    }
 }

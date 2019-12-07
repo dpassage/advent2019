@@ -10,7 +10,6 @@ public struct Computer {
 
     public init(memory: [Int]) {
         self.memory = memory
-        self.memory.append(0)
     }
 
     var inputLines = [Int]()
