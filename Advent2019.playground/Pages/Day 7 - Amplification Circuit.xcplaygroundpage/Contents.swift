@@ -24,7 +24,7 @@ let permutations = phases.permute()
 print(permutations)
 
 func findBestPhase(program: [Int]) -> Int {
-    var amp = Amp(program: program)
+    let amp = Amp(program: program)
 
     var bestScore = Int.min
     for permutation in permutations {
@@ -46,4 +46,79 @@ let day7string = try! String(contentsOf: fileURL).trimmingCharacters(in: .whites
 let day7program = day7string.split(separator: ",").map(String.init).compactMap(Int.init)
 
 print(findBestPhase(program: day7program))
+
+//     part 2
+
+struct NewAmp {
+    var computer: Computer
+    init(memory: [Int], phase: Int) {
+        self.computer = Computer(memory: memory)
+        self.computer.input(line: phase)
+    }
+
+    mutating func cycle(input: Int) -> Int? {
+        computer.input(line: input)
+        computer.runToOutput()
+        let result = computer.output.first
+        computer.resetOutput()
+        return result
+    }
+}
+
+struct Thruster {
+    var amps: [NewAmp]
+    var lastOutput = 0
+    var finished = false
+
+    init(memory: [Int], phases: [Int]) {
+        amps = phases.map { NewAmp(memory: memory, phase: $0) }
+    }
+
+    mutating func cycle() {
+        var input = lastOutput
+        for i in 0..<amps.count {
+            guard let nextInput = amps[i].cycle(input: input) else {
+                finished = true
+                return
+            }
+            input = nextInput
+        }
+        lastOutput = input
+    }
+
+    mutating func bestOutput() -> Int {
+        while !finished {
+            cycle()
+        }
+        return lastOutput
+    }
+}
+
+func realThruster(program: [Int]) -> Int {
+    var bestResult = Int.min
+    var bestPhase = [Int]()
+    let phases = [9,8,7,6,5]
+    let permutations = phases.permute()
+    for permutation in permutations {
+        var thruster = Thruster(memory: program, phases: permutation)
+        let result = thruster.bestOutput()
+        if result > bestResult {
+            bestResult = result
+            bestPhase = permutation
+        }
+    }
+    print("bestPhase: ", bestPhase)
+    return bestResult
+}
+
+//let thrusterProgram1 = [3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5]
+//print(realThruster(program: thrusterProgram1))
+
+//let thrusterProgram2 = [3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,
+//-5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,
+//53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10]
+//print(realThruster(program: thrusterProgram2))
+
+print(realThruster(program: day7program))
+
 //: [Next](@next)
