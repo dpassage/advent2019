@@ -129,10 +129,20 @@ public struct Computer {
     }
 
     public mutating func run() {
-        print("MEMORY COUNT: \(memory.count)")
         while !crashed && !halted {
             step()
         }
+    }
+
+    public mutating func runToOutput() {
+        let outputs = output.count
+        while !crashed && !halted && outputs == output.count {
+            step()
+        }
+    }
+
+    public mutating func resetOutput() {
+        output = []
     }
 
     public static func execute(program: String, inputs: [Int] = []) {
