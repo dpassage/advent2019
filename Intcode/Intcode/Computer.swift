@@ -72,7 +72,7 @@ public struct Computer {
     public mutating func step() {
         guard !crashed && !halted else { return }
         let instruction = memory[pc]
-        print("pc \(pc) instr \(instruction)")
+//        print("pc \(pc) instr \(instruction)")
         let opcode = instruction % 100
         switch opcode {
         case 1:
