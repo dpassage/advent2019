@@ -3,6 +3,7 @@ import Foundation
 public struct Computer {
     public var memory: [Int]
     var pc = 0
+    var rb = 0
     var crashed = false
     var halted = false
 
@@ -10,6 +11,7 @@ public struct Computer {
 
     public init(memory: [Int]) {
         self.memory = memory
+        self.memory.append(contentsOf: [Int](repeating: 0, count: 10_000))
     }
 
     var inputLines = [Int]()
@@ -37,6 +39,9 @@ public struct Computer {
             return memory[paramValue]
         case 1:
             return paramValue
+        case 2:
+            let location = paramValue + rb
+            return memory[location]
         default:
             crash("invalid addressing mode \(mode)")
             return .min
@@ -48,23 +53,39 @@ public struct Computer {
         return readMem(paramValue: memory[pc + param], mode: addressingMode(instruction: instruction, parameter: param))
     }
 
+    mutating func write(param: Int, value: Int) {
+        let instruction = memory[pc]
+        let paramValue = memory[pc + param]
+        let mode = addressingMode(instruction: instruction, parameter: param)
+        switch mode {
+        case 0:
+            memory[paramValue] = value
+        case 1:
+            crash("cannot write to immediiate mode parameter")
+        case 2:
+            memory[rb + paramValue] = value
+        default:
+            crash("unknown addressing mode \(mode)")
+        }
+    }
+
     public mutating func step() {
         guard !crashed && !halted else { return }
         let instruction = memory[pc]
-//        print("pc \(pc) instr \(instruction)")
+        print("pc \(pc) instr \(instruction)")
         let opcode = instruction % 100
         switch opcode {
         case 1:
             let argument1 = read(param: 1)
             let argument2 = read(param: 2)
             let sum = argument1 + argument2
-            memory[memory[pc + 3]] = sum
+            write(param: 3, value: sum)
             pc += 4
         case 2:
             let argument1 = read(param: 1)
             let argument2 = read(param: 2)
             let product = argument1 * argument2
-            memory[memory[pc + 3]] = product
+            write(param: 3, value: product)
             pc += 4
         case 3:
             guard !inputLines.isEmpty else {
@@ -73,6 +94,7 @@ public struct Computer {
             }
             let line = inputLines.removeFirst()
             memory[memory[pc + 1]] = line
+            write(param: 1, value: line)
             pc += 2
         case 4:
             let value = read(param: 1)
@@ -105,7 +127,7 @@ public struct Computer {
             let argument1 = read(param: 1)
             let argument2 = read(param: 2)
             let result = (argument1 < argument2) ? 1 : 0
-            memory[memory[pc + 3]] = result
+            write(param: 3, value: result)
             pc += 4
         // Opcode 8 is equals: if the first parameter is equal to the second parameter, it stores 1 in the position
         // given by the third parameter. Otherwise, it stores 0.
@@ -113,8 +135,14 @@ public struct Computer {
             let argument1 = read(param: 1)
             let argument2 = read(param: 2)
             let result = (argument1 == argument2) ? 1 : 0
-            memory[memory[pc + 3]] = result
+            write(param: 3, value: result)
             pc += 4
+        // Opcode 9 adjusts the relative base by the value of its only parameter. The relative base increases
+        // (or decreases, if the value is negative) by the value of the parameter.
+        case 9:
+            let offset = read(param: 1)
+            rb += offset
+            pc += 2
         case 99:
             print("HALT")
             halted = true
