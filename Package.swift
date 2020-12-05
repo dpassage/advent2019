@@ -17,7 +17,7 @@ let package = Package(
             dependencies: ["Advent2019Kit"]),
         .target(
             name: "Advent2019Kit",
-            dependencies: ["AdventLib"]),
+            dependencies: ["AdventLib", "Intcode"]),
         .testTarget(
             name: "Advent2019KitTests",
             dependencies: ["Advent2019Kit"]),

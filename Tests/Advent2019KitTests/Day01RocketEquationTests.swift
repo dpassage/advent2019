@@ -8,6 +8,7 @@
 import XCTest
 @testable import Advent2019Kit
 import AdventLib
+import Intcode
 
 class Day01RocketEquationTests: XCTestCase {
     /*
