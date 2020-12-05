@@ -1,64 +1,39 @@
+//
+//  Day03CrossedWires.swift
+//  
+//
+//  Created by David Paschich on 12/5/20.
+//
+
 import Foundation
+import AdventLib
 
-
-// swiftlint:disable identifier_name
-public struct Point {
-    public var x: Int
-    public var y: Int
-
-    public init(x: Int, y: Int) {
-        self.x = x
-        self.y = y
-    }
-
-    public static let origin = Point(x: 0, y: 0)
+// answer was 316
+public func day03part1() {
+    let input = readlines()
+    print(nearestCrossing(wires: input))
 }
 
-extension Point: Hashable {}
-
-extension Point: Comparable {
-    public static func < (lhs: Point, rhs: Point) -> Bool {
-        if lhs.y == rhs.y {
-            return lhs.x < rhs.x
-        }
-        return lhs.y < rhs.y
-    }
-
-    public static func + (lhs: Point, rhs: Point) -> Point {
-        return Point(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
-    }
-
-    public static func - (lhs: Point, rhs: Point) -> Point {
-        return Point(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
-    }
+// answer was 16368
+public func day03part2() {
+    let input = readlines()
+    print(shortestCrossing(wires: input))
 }
 
-extension Point {
-    public func adjacents() -> [Point] {
-        return [
-            Point(x: x + 1, y: y),
-            Point(x: x - 1, y: y),
-            Point(x: x, y: y + 1),
-            Point(x: x, y: y - 1)
-        ]
+func nearestCrossing(wires: [String]) -> Int {
+    var panel = Panel()
+    for (index, wire) in wires.enumerated() {
+        panel.addWire(wire, index: index)
     }
+    return  panel.nearestCrossingDistance()
+}
 
-    public func allAdjacents() -> [Point] {
-        return [
-            Point(x: x + 1, y: y),
-            Point(x: x - 1, y: y),
-            Point(x: x, y: y + 1),
-            Point(x: x, y: y - 1),
-            Point(x: x + 1, y: y + 1),
-            Point(x: x - 1, y: y + 1),
-            Point(x: x + 1, y: y - 1),
-            Point(x: x - 1, y: y - 1)
-        ]
+func shortestCrossing(wires: [String]) -> Int {
+    var panel = Panel()
+    for (index, wire) in wires.enumerated() {
+        panel.addWire(wire, index: index)
     }
-
-    public func distance(from other: Point) -> Int {
-        return abs(x - other.x) + abs(y - other.y)
-    }
+    return panel.shortestCrossingDistance()
 }
 
 // A Field is a 2-dimensional "array" of infinite extent.
