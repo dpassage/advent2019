@@ -5,7 +5,7 @@ public struct Computer {
     var pc = 0
     var rb = 0
     var crashed = false
-    var halted = false
+    public internal(set) var halted = false
 
     public var output: [Int] = []
 

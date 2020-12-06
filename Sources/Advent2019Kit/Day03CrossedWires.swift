@@ -21,7 +21,7 @@ public func day03part2() {
 }
 
 func nearestCrossing(wires: [String]) -> Int {
-    var panel = Panel()
+    var panel = WiringPanel()
     for (index, wire) in wires.enumerated() {
         panel.addWire(wire, index: index)
     }
@@ -29,14 +29,14 @@ func nearestCrossing(wires: [String]) -> Int {
 }
 
 func shortestCrossing(wires: [String]) -> Int {
-    var panel = Panel()
+    var panel = WiringPanel()
     for (index, wire) in wires.enumerated() {
         panel.addWire(wire, index: index)
     }
     return panel.shortestCrossingDistance()
 }
 
-public struct Panel {
+public struct WiringPanel {
     var field: Field<Int> = Field(defaultValue: 0)
     var wirePoints: [[Point]] = []
     var crossings: [Point] = []
