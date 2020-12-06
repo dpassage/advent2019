@@ -18,6 +18,31 @@ public func day11part1() {
     print(result)
 }
 
+// AHLCPRAL was right!
+public func day11part2() {
+    let line = readLine()!
+    let program = line.split(separator: ",").map(String.init).compactMap(Int.init)
+    var robot = PaintingRobot(program: program)
+    robot.hull[Point(x: 0, y: 0)] = .white
+    _ = robot.run()
+
+    var output: String = ""
+    let (bottomLeft, upperRight) = robot.hull.extent()
+    print(bottomLeft, upperRight)
+    for y in ((bottomLeft.y)...(upperRight.y)).reversed() {
+        for x in (bottomLeft.x)...(upperRight.x) {
+            let panel = robot.hull[Point(x: x, y: y)]
+            if panel == .white {
+                output.append("#")
+            } else {
+                output.append(".")
+            }
+        }
+        output.append("\n")
+    }
+    print(output)
+}
+
 enum Panel: Int {
     case empty = -1
     case black = 0
