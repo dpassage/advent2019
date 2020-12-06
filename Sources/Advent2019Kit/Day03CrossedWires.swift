@@ -36,39 +36,6 @@ func shortestCrossing(wires: [String]) -> Int {
     return panel.shortestCrossingDistance()
 }
 
-// A Field is a 2-dimensional "array" of infinite extent.
-struct Field<Element> {
-    var defaultValue: Element
-    var storage: [Point: Element] = [:]
-    init(defaultValue: Element) {
-        self.defaultValue = defaultValue
-    }
-
-    subscript(position: Point) -> Element {
-        get {
-            return storage[position] ?? defaultValue
-        }
-        set {
-            storage[position] = newValue
-        }
-    }
-
-    // rectangle containing all values which have been set
-    func extent() -> (Point, Point) {
-        var lowest = Int.max
-        var highest = Int.min
-        var leftmost = Int.max
-        var rightmost = Int.min
-        for key in storage.keys {
-            lowest = min(lowest, key.y)
-            highest = max(highest, key.y)
-            leftmost = min(leftmost, key.x)
-            rightmost = max(rightmost, key.x)
-        }
-        return (Point(x: leftmost, y: lowest), Point(x: rightmost, y: highest))
-    }
-}
-
 public struct Panel {
     var field: Field<Int> = Field(defaultValue: 0)
     var wirePoints: [[Point]] = []
