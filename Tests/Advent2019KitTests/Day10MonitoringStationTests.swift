@@ -39,6 +39,43 @@ class Day10MonitoringStationTests: XCTestCase {
         let (bestPoint, _) = field.bestAsteriodsSeen()
         XCTAssertEqual(bestPoint, Point(x: 8, y: 3))
 
-        field.frickinLasers(start: bestPoint, limit: 1)
+        let list = field.frickinLasers(start: bestPoint, limit: 2)
+        XCTAssertEqual(list[0], Point(x: 8, y: 1))
+        XCTAssertEqual(list[1], Point(x: 9, y: 0))
+    }
+
+    func testLargeLasers() {
+        let input =
+        """
+        .#..##.###...#######
+        ##.############..##.
+        .#.######.########.#
+        .###.#######.####.#.
+        #####.##.#.##.###.##
+        ..#####..#.#########
+        ####################
+        #.####....###.#.#.##
+        ##.#################
+        #####.##.###..####..
+        ..######..##.#######
+        ####.##.####...##..#
+        .#####..#.######.###
+        ##...#.##########...
+        #.##########.#######
+        .####.#.###.###.#.##
+        ....##.##.###..#####
+        .#.#.###########.###
+        #.#.#.#####.####.###
+        ###.##.####.##.#..##
+        """
+
+        let field = AsteroidField(text: input)
+        let (bestPoint, _) = field.bestAsteriodsSeen()
+        XCTAssertEqual(bestPoint, Point(x: 11, y:13))
+
+        let list = field.frickinLasers(start: bestPoint, limit: 200)
+        XCTAssertEqual(list[0], Point(x: 11, y: 12))
+        XCTAssertEqual(list[1], Point(x: 12, y: 1))
+        XCTAssertEqual(list[199], Point(x: 8, y: 2))
     }
 }

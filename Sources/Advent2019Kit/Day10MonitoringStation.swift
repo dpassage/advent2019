@@ -38,11 +38,18 @@ extension Point {
         return Point(x: x / divisor, y: y / divisor)
     }
 
+    // positive Y is down, negative y is up
+    //
+    // quads are:
+    //
+    // 3 | 0
+    // -----
+    // 2 | 1
     var quadrant: Int {
-        if x >= 0 && y > 0 { return 0 }
-        if x > 0 && y <= 0 { return 1 }
-        if x <= 0 && y < 0 { return 2 }
-        if x < 0 && y >= 0 { return 3 }
+        if x >= 0 && y < 0 { return 0 }
+        if x > 0 && y >= 0 { return 1 }
+        if x <= 0 && y > 0 { return 2 }
+        if x < 0 && y <= 0 { return 3 }
         return -1
     }
 
@@ -55,7 +62,7 @@ extension Point {
     // starting at the positive y axis
     func clockwiseOf(_ other: Point) -> Bool {
         if self.quadrant == other.quadrant {
-            return self.slope < other.slope
+            return self.slope > other.slope
         } else {
             return self.quadrant > other.quadrant
         }
@@ -117,21 +124,48 @@ struct AsteroidField {
     func frickinLasers(start: Point, limit: Int) -> [Point] {
         var result = [Point]()
 
-        var asteroids: [Point: [Point]] = [:]
+        var grid = self.grid
 
-        // first build the array
+        // make a list of all slopes in order
+
+        var slopeSet = Set<Point>()
+
         for x in 0..<grid.width {
             for y in 0..<grid.height {
+                guard grid[x, y] else { continue }
+
                 let asteroid = Point(x: x, y: y)
                 if asteroid == start { continue }
+                let difference = (asteroid - start).normalized()
 
-                let norm = asteroid.normalized()
-                asteroids[norm, default: []].append(asteroid)
-                asteroids[norm]?.sort(by: { $0.magnitude < $1.magnitude })
+                slopeSet.insert(difference)
+
             }
         }
 
-        print(asteroids)
+        let slopeList = [Point](slopeSet).sorted(by: { $1.clockwiseOf($0) })
+        print(slopeList)
+
+
+        // for each slope in list:
+        // find nearest point to start
+        // remove from field, add to result
+
+        while result.count < limit {
+            slope: for slope in slopeList {
+                var candidate = start + slope
+                while grid.isValidIndex(candidate) {
+                    if grid[candidate] {
+                        result.append(candidate)
+                        if result.count >= limit { return result }
+                        grid[candidate] = false
+                        continue slope
+                    } else {
+                        candidate = candidate + slope
+                    }
+                }
+            }
+        }
 
         return result
     }
