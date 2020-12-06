@@ -6,10 +6,32 @@
 //
 
 import Foundation
-
-
-import Foundation
 import AdventLib
+
+// 280 is right!
+public func day10part1() {
+    let input = readlines().joined(separator: "\n")
+
+    let field = AsteroidField(text: input)
+
+    let (_, result) = field.bestAsteriodsSeen()
+
+    print(result)
+}
+
+// 706 is right!
+public func day10part2() {
+    let input = readlines().joined(separator: "\n")
+
+    let field = AsteroidField(text: input)
+
+    let (bestPoint, _) = field.bestAsteriodsSeen()
+
+    let shooting = field.frickinLasers(start: bestPoint, limit: 200)
+    let lastPointShot = shooting[199]
+    let result = (lastPointShot.x * 100) + lastPointShot.y
+    print(result)
+}
 
 extension Point {
     // returns a point with the same slope and the lowest possible values
