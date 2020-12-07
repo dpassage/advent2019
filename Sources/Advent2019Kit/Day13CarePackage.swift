@@ -19,6 +19,7 @@ public func day13part1() {
     print(cabinet.printScreen())
 }
 
+// 9803 was correct!
 public func day13part2() {
     guard CommandLine.arguments.count >= 3 else {
         print("give path to program as 2nd argument")
@@ -31,8 +32,8 @@ public func day13part2() {
         let program = input.split(separator: ",").map(String.init).compactMap(Int.init)
         print(program)
         var cabinet = ArcadeCabinet(program: program)
+        cabinet.insertQuarter()
         cabinet.run()
-        print(cabinet.blockTiles())
         print(cabinet.printScreen())
     } catch {
         print("error \(error)!")
@@ -69,9 +70,15 @@ struct ArcadeCabinet {
     var display = ""
     var computer: Computer
     var outputStack: [Int] = []
+    var lastPaddle = Point(x: -1, y: -1)
+    var lastBall = Point(x: -1, y: -1)
 
     init(program: [Int]) {
         computer = Computer(memory: program)
+    }
+
+    mutating func insertQuarter() {
+        computer.memory[0] = 2
     }
 
     mutating func run() {
@@ -80,6 +87,15 @@ struct ArcadeCabinet {
             outputStack.append(contentsOf: computer.output)
             computer.resetOutput()
             updateDisplay()
+            if computer.awaitingInput {
+                if lastPaddle.x < lastBall.x {
+                    computer.input(line: 1)
+                } else if lastPaddle.x > lastBall.x {
+                    computer.input(line: -1)
+                } else {
+                    computer.input(line: 0)
+                }
+            }
         }
     }
 
@@ -94,9 +110,16 @@ struct ArcadeCabinet {
             } else {
                 let tile = Tile(rawValue: value)!
                 field[Point(x: x, y: y)] = tile
+                if tile == .ball {
+                    lastBall = Point(x: x, y: y)
+                } else if tile == .paddle {
+                    lastPaddle = Point(x: x, y: y)
+                }
             }
+            print(printScreen())
         }
     }
+
     mutating func startup(_ output: [Int]) {
         let limit = output.count / 3
         for i in 0..<limit {

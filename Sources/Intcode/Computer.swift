@@ -18,6 +18,12 @@ public struct Computer {
     var inputLines = [Int]()
     public mutating func input(line: Int) {
         inputLines.append(line)
+        awaitingInput = false
+    }
+
+    public mutating func reset() {
+        pc = 0
+        rb = 0
     }
 
     // For given instruction and parameter number, return the addressing mode.
