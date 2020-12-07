@@ -13,11 +13,30 @@ import Intcode
 public func day13part1() {
     let line = readLine()!
     let program = line.split(separator: ",").map(String.init).compactMap(Int.init)
-    var computer = Computer(memory: program)
-    computer.run()
-    var cabinet = ArcadeCabinet()
-    cabinet.startup(computer.output)
+    var cabinet = ArcadeCabinet(program: program)
+    cabinet.run()
     print(cabinet.blockTiles())
+    print(cabinet.printScreen())
+}
+
+public func day13part2() {
+    guard CommandLine.arguments.count >= 3 else {
+        print("give path to program as 2nd argument")
+        return
+    }
+    do {
+        let path = CommandLine.arguments[2]
+        let input = try String(contentsOfFile: path).trimmingCharacters(in: .whitespacesAndNewlines)
+        print(input)
+        let program = input.split(separator: ",").map(String.init).compactMap(Int.init)
+        print(program)
+        var cabinet = ArcadeCabinet(program: program)
+        cabinet.run()
+        print(cabinet.blockTiles())
+        print(cabinet.printScreen())
+    } catch {
+        print("error \(error)!")
+    }
 }
 
 //0 is an empty tile. No game object appears in this tile.
@@ -33,9 +52,51 @@ enum Tile: Int {
     case ball
 }
 
+extension Tile: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .empty: return " "
+        case .wall: return "#"
+        case .block: return "X"
+        case .paddle: return "_"
+        case .ball: return "*"
+        }
+    }
+}
+
 struct ArcadeCabinet {
     var field = Field<Tile>(defaultValue: .empty)
+    var display = ""
+    var computer: Computer
+    var outputStack: [Int] = []
 
+    init(program: [Int]) {
+        computer = Computer(memory: program)
+    }
+
+    mutating func run() {
+        while !computer.halted {
+            computer.runToIO()
+            outputStack.append(contentsOf: computer.output)
+            computer.resetOutput()
+            updateDisplay()
+        }
+    }
+
+    mutating func updateDisplay() {
+        while outputStack.count >= 3 {
+            let x = outputStack.removeFirst()
+            let y = outputStack.removeFirst()
+            let value = outputStack.removeFirst()
+
+            if x == -1 {
+                display = "\(value)"
+            } else {
+                let tile = Tile(rawValue: value)!
+                field[Point(x: x, y: y)] = tile
+            }
+        }
+    }
     mutating func startup(_ output: [Int]) {
         let limit = output.count / 3
         for i in 0..<limit {
@@ -52,5 +113,19 @@ struct ArcadeCabinet {
 
     func blockTiles() -> Int {
         return field.storage.values.filter { $0 == .block }.count
+    }
+
+    func printScreen() -> String {
+        var result = ""
+        let (lowerLeft, upperRight) = field.extent()
+        print(lowerLeft, upperRight)
+        result.append("SCORE: \(display)\n")
+        for y in ((lowerLeft.y)...(upperRight.y)) {
+            for x in (lowerLeft.x)...(upperRight.x) {
+                result.append(field[Point(x: x, y: y)].description)
+            }
+            result.append("\n")
+        }
+        return result
     }
 }
