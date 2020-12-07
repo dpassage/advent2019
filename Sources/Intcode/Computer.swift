@@ -4,8 +4,9 @@ public struct Computer {
     public var memory: [Int]
     var pc = 0
     var rb = 0
-    var crashed = false
+    public internal(set) var crashed = false
     public internal(set) var halted = false
+    public internal(set) var awaitingInput = false
 
     public var output: [Int] = []
 
@@ -70,7 +71,7 @@ public struct Computer {
     }
 
     public mutating func step() {
-        guard !crashed && !halted else { return }
+        guard !crashed && !halted && !awaitingInput else { return }
         let instruction = memory[pc]
 //        print("pc \(pc) instr \(instruction)")
         let opcode = instruction % 100
@@ -89,7 +90,8 @@ public struct Computer {
             pc += 4
         case 3:
             guard !inputLines.isEmpty else {
-                crash("no input!")
+                print("awaiting input!")
+                awaitingInput = true
                 return
             }
             let line = inputLines.removeFirst()
@@ -165,6 +167,13 @@ public struct Computer {
     public mutating func runToOutput() {
         let outputs = output.count
         while !crashed && !halted && outputs == output.count {
+            step()
+        }
+    }
+
+    public mutating func runToIO() {
+        let outputs = output.count
+        while !crashed && !halted && !awaitingInput && outputs == output.count {
             step()
         }
     }
