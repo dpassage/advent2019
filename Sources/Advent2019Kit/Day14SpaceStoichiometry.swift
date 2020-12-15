@@ -60,7 +60,7 @@ func topoSort(_ rules: [OreRule]) -> [OreRule] {
         temporaryMark.insert(rule.output.1)
 
         for (_, inputName) in rule.inputs {
-            if let nextRule = rules.first(where: { $0.output.1 == inputName}){
+            if let nextRule = rules.first(where: { $0.output.1 == inputName}) {
                 visit(nextRule)
             }
         }
@@ -69,11 +69,11 @@ func topoSort(_ rules: [OreRule]) -> [OreRule] {
         permanentMark.insert(rule.output.1)
         result.append(rule)
     }
-    while permanentMark.count < rules.count {
-        if let nextRule = rules.first(where: { !permanentMark.contains($0.output.1) }) {
-            visit(nextRule)
-        }
+
+    for rule in rules where !permanentMark.contains(rule.output.1) {
+        visit(rule)
     }
+
     return result
 }
 
@@ -119,6 +119,14 @@ struct OreRule {
         let size = Int(parts.removeFirst())!
         let name = parts.removeFirst()
         output = (size, name)
+    }
+}
+
+extension OreRule: CustomStringConvertible {
+    var description: String {
+        let input = inputs.map { "\($0.0) \($0.1)" }.joined(separator: ", ")
+
+        return "\(input) => \(output.0) \(output.1)"
     }
 }
 

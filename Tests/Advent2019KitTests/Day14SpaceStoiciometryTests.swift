@@ -34,10 +34,15 @@ class SpaceStoiciometryTests: XCTestCase {
             176 ORE => 6 VJHF
             """
         let rules = input.components(separatedBy: "\n").compactMap(OreRule.init)
-        let sorted = topoSort(rules)
-        XCTAssertEqual(sorted.count, rules.count)
-        XCTAssertEqual(sorted.first?.inputs.first?.1, "ORE")
-        XCTAssertEqual(sorted.last?.output.1, "FUEL")
+
+        for _ in 0..<10 {
+            let random = rules.shuffled()
+            let sorted = topoSort(random)
+//            print(sorted.map(\.description).joined(separator: "\n"))
+            XCTAssertEqual(sorted.count, rules.count)
+            XCTAssertEqual(sorted.first?.inputs.first?.1, "ORE")
+            XCTAssertEqual(sorted.last?.output.1, "FUEL")
+        }
     }
 
     func testSample1() {
