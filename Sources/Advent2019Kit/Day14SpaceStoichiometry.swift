@@ -16,15 +16,27 @@ public func day14part1() {
     print(result)
 }
 
+// 1639374 was right!
+public func day14part2() {
+    let lines = readlines()
+    let input = lines.joined(separator: "\n")
+    let result = findFuel(ore: 1000000000000, input: input)
+    print(result)
+}
+
 func computeOreForFuel(input: [String]) -> Int {
     let rules: [OreRule] = input.compactMap(OreRule.init(_:))
 
-    let sortedRules = topoSort(rules).reversed()
+    let sortedRules = [OreRule](topoSort(rules).reversed())
 
-    var factory = NanoFactory()
+    return computeOreSortedRules(sortedRules, fuel: 1)
+}
+
+func computeOreSortedRules(_ sortedRules: [OreRule], fuel: Int) -> Int {
+    var factory = NanoFactory(fuel: fuel)
 
     for rule in sortedRules {
-        print("applying \(rule)")
+//        print("applying \(rule)")
         factory.apply(rule)
     }
 
@@ -66,7 +78,11 @@ func topoSort(_ rules: [OreRule]) -> [OreRule] {
 }
 
 struct NanoFactory {
-    var chemicals: [String: Int] = ["FUEL": 1]
+
+    init(fuel: Int) {
+        chemicals = ["FUEL": fuel]
+    }
+    var chemicals: [String: Int]
     var ore: Int = 0
     var total: Int { return ore + chemicals.values.reduce(0, +) }
     var finished: Bool { return chemicals.isEmpty }
@@ -104,4 +120,34 @@ struct OreRule {
         let name = parts.removeFirst()
         output = (size, name)
     }
+}
+
+// MARK: - Part 1
+// We have a function which takes an amount of fuel and gives us ore.
+// We want the amount of fuel given 1_000_000_000_000 ore.
+// binary search?
+
+func findFuel(ore target: Int, input: String) -> Int {
+    let rules = input.components(separatedBy: "\n").compactMap(OreRule.init)
+    let sortedRules = [OreRule](topoSort(rules).reversed())
+
+    var low = 1
+    var high = 1_000_000_000
+    var highestLessThanTarget = 1
+
+    while low < (high - 1) {
+        let candidate = (low + high) / 2
+        let ore = computeOreSortedRules(sortedRules, fuel: candidate)
+        print("tried \(candidate) got \(ore) low \(low) high \(high)")
+        if ore == target { return candidate }
+
+        else if ore < target {
+            low = candidate
+            highestLessThanTarget = candidate
+        } else if ore > target {
+            high = candidate
+        }
+    }
+
+    return highestLessThanTarget
 }
