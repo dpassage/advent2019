@@ -14,15 +14,28 @@ public func day15part1() {
     let input = readlines()
     let program = input[0].components(separatedBy: ",").compactMap(Int.init)
 
-    let result = fewestCommands(program)
+    let (result, _, tankLocation) = buildMap(program)
+    print(result, tankLocation)
+}
+
+// 332 was correct!
+public func day15part2() {
+    let input = readlines()
+    let program = input[0].components(separatedBy: ",").compactMap(Int.init)
+
+    let (_, field, tankLocation) = buildMap(program)
+    let result = fillMap(field: field, startingPosition: tankLocation)
     print(result)
 }
 
-func fewestCommands(_ program: [Int]) -> Int {
+func buildMap(_ program: [Int]) -> (Int, Field<Cell>, Point) {
     var heap = Heap<RobotState> { $0.commandsSoFar.count < $1.commandsSoFar.count }
     var field = Field<Cell>(defaultValue: .unknown)
+    var shortestPath = 0
+    var tankLocation = Point(x: Int.min, y: Int.min)
+
     defer { print(field.printGrid()) }
-    
+
     let start = RobotState(program: program)
     heap.enqueue(start)
 
@@ -40,13 +53,45 @@ func fewestCommands(_ program: [Int]) -> Int {
             switch result {
             case .floor: heap.enqueue(new)
             case .wall: break
-            case .oxygen: return new.commandsSoFar.count
+            case .oxygen:
+                heap.enqueue(new)
+                shortestPath = new.commandsSoFar.count
+                tankLocation = new.position
             case .unknown: fatalError("unexpected result .unknown")
             }
         }
     }
 
-    return -1
+    return (shortestPath, field, tankLocation)
+}
+
+func fillMap(field: Field<Cell>, startingPosition: Point) -> Int {
+    var field = field
+
+    var heap = Heap<FillState> { $0.moves < $1.moves }
+    var longestPath = -1
+
+    let start = FillState(position: startingPosition)
+    heap.enqueue(start)
+
+    precondition(field[startingPosition] == .oxygen)
+
+    while let current = heap.dequeue() {
+        for adjacent in current.position.adjacents() {
+            switch field[adjacent] {
+            case .floor:
+                field[adjacent] = .oxygen
+                var new = current
+                new.position = adjacent
+                new.moves += 1
+                longestPath = max(longestPath, new.moves)
+                heap.enqueue(new)
+            default: break
+            }
+        }
+    }
+    print(field.printGrid())
+    return longestPath
 }
 
 enum Cell: Character {
@@ -94,3 +139,9 @@ struct RobotState {
         }
     }
 }
+
+struct FillState {
+    var position: Point
+    var moves: Int = 0
+}
+
