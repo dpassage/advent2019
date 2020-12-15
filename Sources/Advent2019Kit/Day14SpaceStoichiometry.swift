@@ -18,34 +18,69 @@ public func day14part1() {
 func computeOreForFuel(input: [String]) -> Int {
     let rules: [OreRule] = input.compactMap(OreRule.init(_:))
 
-    var inventory: [String: Int] = ["FUEL": 1]
-    var oreUsed = 0
+    var heap = Heap<NanoFactory> { (lhs, rhs) -> Bool in
+        if lhs.ore == rhs.ore {
+            return lhs.total < rhs.total
+        }
+        return lhs.ore < rhs.ore
+    }
 
-    while !inventory.isEmpty {
-        print("inventory \(inventory) ore \(oreUsed)")
-        let targetName = inventory.keys.first!
-        let targetAmount = inventory.removeValue(forKey: targetName)!
+    let first = NanoFactory(rules: rules)
+    heap.enqueue(first)
 
-        // find the rule which produces this
-        let rule = rules.first { $0.output.1 == targetName }!
+    var count = 0
+    while let cur = heap.dequeue() {
+        count += 1
+        if count % 1_000 == 0 { print("\(count) remaining is \(heap.count) cur is \(cur.ore) \(cur.total) \(cur.chemicals)") }
+        if cur.finished { return cur.ore }
 
-        print("appluing rule \(rule)")
-        // decide how many times to apply it
-        let applications = (targetAmount / rule.output.0) + (targetAmount % rule.output.0 == 0 ? 0 : 1)
-
-        for input in rule.inputs {
-            if input.1 == "ORE" {
-                oreUsed += (input.0 * applications)
+        if !cur.hasApplicableRule { continue }
+        // try to apply each of the remaining rules
+        for ruleIndex in 0..<cur.rules.count {
+            var newFactory = cur
+            let rule = newFactory.rules.remove(at: ruleIndex)
+//            print("applying \(rule)")
+            if newFactory.apply(rule) {
+//                print("applied, enqueueing")
+                heap.enqueue(newFactory)
             } else {
-                inventory[input.1, default: 0] += (input.0 * applications)
+//                print("did not apply, dropping")
             }
         }
     }
 
-    return oreUsed
+    return -1
 }
 
+struct NanoFactory {
+    var chemicals: [String: Int] = ["FUEL": 1]
+    var ore: Int = 0
+    var total: Int { return ore + chemicals.values.reduce(0, +) }
+    var finished: Bool { return chemicals.isEmpty }
+    var rules: [OreRule]
 
+    mutating func apply(_ rule: OreRule) -> Bool {
+        guard let targetAmount = chemicals.removeValue(forKey: rule.output.1) else {
+            return false
+        }
+
+        let applications = (targetAmount / rule.output.0) + (targetAmount % rule.output.0 == 0 ? 0 : 1)
+
+        for input in rule.inputs {
+            if input.1 == "ORE" {
+                ore += (input.0 * applications)
+            } else {
+                chemicals[input.1, default: 0] += (input.0 * applications)
+            }
+        }
+        return true
+    }
+
+    var hasApplicableRule: Bool {
+        // if there are fewer rules than chemicals, prune this one
+        return rules.count >= chemicals.count
+    }
+}
 
 struct OreRule {
     var output: (Int, String)
